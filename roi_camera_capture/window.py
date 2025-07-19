@@ -164,7 +164,7 @@ class MainWindow(QMainWindow):
         directory = "out"
         if not os.path.exists(directory):
             os.makedirs(directory)
-        default_name = f"{directory}/data_{timestamp}"
+        default_name = os.path.join(directory, f"image_{timestamp}")
         
         filename, _ = QFileDialog.getSaveFileName(
             self, "Задайте базовое имя файла", default_name, 
@@ -172,16 +172,12 @@ class MainWindow(QMainWindow):
         )
         
         if filename:
-            base_name = filename
-            if '.' in filename:
-                base_name = filename.rsplit('.', 1)[0]
-            
-            cv2.imwrite(f"{base_name}_original.png", self.video_thread.original_frame)
-            cv2.imwrite(f"{base_name}_roi.png", self.video_thread.roi)
-            cv2.imwrite(f"{base_name}_average_roi.png", self.video_thread.average_roi)
+            cv2.imwrite(f"{filename}_orig.png", self.video_thread.original_frame)
+            cv2.imwrite(f"{filename}_roi.png", self.video_thread.roi)
+            cv2.imwrite(f"{filename}_av_roi.png", self.video_thread.average_roi)
                         
             if self.status_bar is not None:
-                self.status_bar.showMessage(f"Все изображения сохранены с базовым именем {os.path.basename(base_name)}", 5000)
+                self.status_bar.showMessage(f"Все изображения сохранены с базовым именем {filename}", 5000)
     
     def on_mouse_pressed(self, x, y):
         """Обработчик нажатия кнопки мыши на видео"""
