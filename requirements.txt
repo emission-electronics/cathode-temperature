@@ -1,0 +1,7 @@
+ipykernel==6.29.5
+matplotlib==3.10.1
+matplotlib-inline==0.1.7
+numpy==2.2.4
+opencv-python==4.11.0.86
+PyQt6==6.8.1
+scipy==1.15.2
