@@ -17,7 +17,7 @@ class VideoThread(QThread):
         roi_signal: Передает ROI
     """
     change_pixmap_signal = pyqtSignal(np.ndarray)
-    roi_signal = pyqtSignal(np.ndarray)
+    roi_signal = pyqtSignal(np.ndarray, np.ndarray)
     average_roi_signal = pyqtSignal(np.ndarray)
     
     def __init__(self, camera_index=0):
@@ -87,7 +87,7 @@ class VideoThread(QThread):
                 self.average_roi = average_roi.copy()
                 
                 # Отправляем сигнал с ROI
-                self.roi_signal.emit(roi)
+                self.roi_signal.emit(roi, np.array([x1, y1, x2, y2]))
                 self.average_roi_signal.emit(average_roi)
 
     def handle_mouse_event(self, event_type: str, x: int, y: int) -> None:

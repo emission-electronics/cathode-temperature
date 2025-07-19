@@ -137,14 +137,12 @@ class MainWindow(QMainWindow):
         """Обновляем изображение с камеры"""
         self.video_view.setImage(cv_img)
     
-    @pyqtSlot(np.ndarray)
-    def update_roi(self, roi: np.ndarray):
+    @pyqtSlot(np.ndarray, np.ndarray)
+    def update_roi(self, roi: np.ndarray, xyl: np.ndarray):
         """Обновляем ROI и отправляем данные для анализа"""
         self.roi_view.setImage(roi)
-        # if roi is not None:
-        #     h, w = roi.shape[:2]
-        #     if self.status_bar is not None:
-        #         self.status_bar.showMessage(f"Выделена область: {w}x{h} пикселей")
+        if self.status_bar is not None:
+            self.status_bar.showMessage(f"Выделена область: x={xyl[0]}:{xyl[2]}, y={xyl[1]}:{xyl[3]}")
     
     @pyqtSlot(np.ndarray)
     def update_average_roi(self, roi: np.ndarray):
