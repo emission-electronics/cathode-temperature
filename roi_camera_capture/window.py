@@ -161,7 +161,7 @@ class MainWindow(QMainWindow):
             return
             
         timestamp = datetime.now().strftime(r"%Y-%m-%d_%H-%M-%S")
-        directory = "out"
+        directory = "images"
         if not os.path.exists(directory):
             os.makedirs(directory)
         default_name = os.path.join(directory, f"image_{timestamp}")
