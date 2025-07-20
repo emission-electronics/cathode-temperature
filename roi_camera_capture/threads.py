@@ -1,12 +1,10 @@
 import cv2
 import numpy as np
-from typing import Tuple, Optional
 from collections import deque
 
 from PyQt6.QtCore import QThread, pyqtSignal
 
 from scipy.interpolate import splprep, splev
-import heapq
 
 class VideoThread(QThread):
     """

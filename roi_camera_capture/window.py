@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 from datetime import datetime
+from PIL import Image
 
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
@@ -16,12 +17,11 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Анализ яркости нити")
-        self.setGeometry(100, 100, 1600, 800)
+        self.showFullScreen()
                 
-        # Создаем вкладку для анализа
         self.camera_tab = QWidget()
         self.setCentralWidget(self.camera_tab)
-        camera_layout = QVBoxLayout(self.camera_tab)
+        camera_layout = QHBoxLayout(self.camera_tab)
         
         # Верхняя панель с видео и выбором камеры
         top_panel = QWidget()
@@ -45,6 +45,8 @@ class MainWindow(QMainWindow):
         self.camera_combo = QComboBox()
         
         self.available_cameras = self.get_available_cameras()
+        if not self.available_cameras:
+            raise Exception("No cameras found")
         for i, camera_name in enumerate(self.available_cameras):
             self.camera_combo.addItem(f"{i}: {camera_name}")
         
@@ -61,7 +63,7 @@ class MainWindow(QMainWindow):
 
         # Нижняя панель для ROI, маски и анализа
         bottom_panel = QWidget()
-        bottom_layout = QHBoxLayout(bottom_panel)
+        bottom_layout = QVBoxLayout(bottom_panel)
         
         # ROI виджет с возможностью зума
         self.roi_view = ZoomableImageView()
@@ -155,7 +157,7 @@ class MainWindow(QMainWindow):
             self.video_thread.roi is None or 
             self.video_thread.average_roi is None):
             if self.status_bar is not None:
-                self.status_bar.showMessage(f"Нет изображений для сохранения: {self.video_thread.average_roi is None}", 5000)
+                self.status_bar.showMessage(f"Нет изображений для сохранения", 5000)
             return
             
         timestamp = datetime.now().strftime(r"%Y-%m-%d_%H-%M-%S")
@@ -170,10 +172,16 @@ class MainWindow(QMainWindow):
         )
         
         if filename:
-            cv2.imwrite(f"{filename}_orig.png", self.video_thread.original_frame)
-            cv2.imwrite(f"{filename}_roi.png", self.video_thread.roi)
-            cv2.imwrite(f"{filename}_av_roi.png", self.video_thread.average_roi)
-                        
+            Image.fromarray(cv2.cvtColor(
+                self.video_thread.original_frame, cv2.COLOR_BGR2RGB
+            )).save(f"{filename}_orig.png")
+            Image.fromarray(cv2.cvtColor(
+                self.video_thread.roi, cv2.COLOR_BGR2RGB
+            )).save(f"{filename}_roi.png")
+            Image.fromarray(cv2.cvtColor(
+                self.video_thread.average_roi, cv2.COLOR_BGR2RGB
+            )).save(f"{filename}_av_roi.png")
+
             if self.status_bar is not None:
                 self.status_bar.showMessage(f"Все изображения сохранены с базовым именем {filename}", 5000)
     
