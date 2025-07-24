@@ -3,7 +3,7 @@
 REM Активируем виртуальное окружение
 call .venv\Scripts\activate.bat
 
-REM Создаём алиас с помощью doskey
+REM Создаём алиас proc с помощью doskey
 doskey proc=python src\method_processing\main.py $*
 
 REM Выводим сообщение

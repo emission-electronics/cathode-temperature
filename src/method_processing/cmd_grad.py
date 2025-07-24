@@ -37,7 +37,7 @@ def wire_brightness(image: np.ndarray, choose_percentage: float = .3) -> tuple[n
     return np.mean(Y_max), np.std(Y_max)
 
 def grad_poly_fit(means: np.ndarray, temperatures: np.ndarray, fit_order: int = 5) -> np.poly1d:
-    popt, _ = np.polyfit(means, temperatures, fit_order, cov=True, full=False)
+    popt = np.polyfit(means, temperatures, fit_order, cov=False, full=False)
     return np.poly1d(popt)
 
 @click.command()
@@ -90,4 +90,4 @@ def grad(ctx: click.Context, overwrite: bool):
     except FileNotFoundError as e:
         lg(__name__).error(f"File not found: {e}")
     except Exception as e:
-        lg(__name__).error(f"Error processing files: {e}")
+        lg(__name__).error(f"Error: {e}")
