@@ -5,3 +5,5 @@ numpy==2.2.4
 opencv-python==4.11.0.86
 PyQt6==6.8.1
 scipy==1.15.2
+msgpack-numpy
+click==8.2.1
