@@ -1,9 +1,13 @@
 @ECHO off
 
+REM Активируем виртуальное окружение
 call .venv\Scripts\activate.bat
-function processing {
-    python src\method_processing\main.py @args
-}
 
-Set-Alias proc processing -Scope Global
-Write-Host "Alias 'proc' created for processing function. Type 'proc --help' for usage."
+REM Создаём алиас с помощью doskey
+doskey proc=python src\method_processing\main.py $*
+
+REM Выводим сообщение
+echo Alias 'proc' created for processing function. Type 'proc --help' for usage.
+
+REM Остаёмся в командной строке
+cmd /k
